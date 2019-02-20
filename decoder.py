@@ -24,6 +24,7 @@ def transFormRepresentation(cutIndexes, binaryData):
     cutIndexes = "".join(["{0:08b}".format(byte) for byte in cutIndexes])
     cutIndexes = [int(cutIndexes[i:i+3], 2) + 1 for i in range(0, len(cutIndexes), 3)]
 
+    print(len(cutIndexes))
     binaryData = "".join(["{0:08b}".format(byte) for byte in binaryData])
     
     decodedValues = []
@@ -31,15 +32,20 @@ def transFormRepresentation(cutIndexes, binaryData):
     for cutLength in cutIndexes[:-1]:
         decodedValues.append(int(binaryData[i : i + cutLength], 2))
         i += cutLength
-    decodedValues.append(int(binaryData[i:], 2))
+    lastVal = list(binaryData[i:])
+    print(len(lastVal))
+    while len(lastVal) > 8:
+        del lastVal[-8]
+    lastVal = "".join(lastVal)
+    decodedValues.append(int(lastVal, 2))
 
     return decodedValues
 
 
 if __name__ == "__main__":
     
-    #filename, _ = sys.argv[1].split(".")
-    filename = "test"
+    filename, _ = sys.argv[1].split(".")
+    #filename = "test"
     numOfValues, extension, cutIndexes, binaryData = 0, "", [], []
     with open("{}.{}".format(filename, "geri"), "rb") as f:
         numOfValues, extension, cutIndexes, binaryData = readGeriFile(f)
