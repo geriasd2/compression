@@ -82,7 +82,12 @@ def huffmanEncode(transformedContent, content):
     codeBook = {}
     transformHuffmanTree(rootNode, codeBook)
     generalizeCodeBook(codeBook)
-    print("oi")
+    content = list(content)
+    content = [codeBook[byte] for byte in content]
+    content =  "".join(content)
+    content = [content[i:i+8] for i in range(0, len(content), 8)]
+    content = ["{0:08b}".format(8 - len(content[-1]))] + content
+    return [int(byte, 2) for byte in content]
 
 
 def generalizeCodeBook(codeBook):
@@ -94,16 +99,21 @@ def generalizeCodeBook(codeBook):
 
 if __name__ == "__main__":
     content = None
-    with open("sample2.data", "rb") as f:
-        #content = f.read()
+    with open("sample3.data", "rb") as f:
+        content = f.read()
+        
+        """
         content = ["a" for _ in range(10)]
         content += ["b" for _ in range(11)]
         content += ["c" for _ in range(1)]
         content += ["d" for _ in range(4)]
         content += ["e" for _ in range(7)]
-
+        """
     transformedContent = transform(content)
-    huffmanEncode(transformedContent, content)
+    encoded = huffmanEncode(transformedContent, content)
+
+    with open("sample3.huffman", "wb") as f:
+        f.write(bytearray(encoded))
 
 
 # hw huffman coding implementation
