@@ -25,6 +25,7 @@ def lz78Encode(data):
             continue
         matchIdx = codeBook.index(chars)
     codeBook = [node(element.idx, element.chars[-1]) for element in codeBook[1:]]
+    a = 0
     return codeBook
         
         
